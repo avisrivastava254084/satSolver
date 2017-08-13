@@ -1,5 +1,12 @@
 import sys, copy
 
+def representsInt(s):
+	try:
+		int(s)
+		return True
+	except ValueError:
+		return False
+
 def readDMACS():
 	global clauseFile, clauseFileLines, clauseSet
 	clauseFile = open('days.txt', "r")
@@ -11,16 +18,15 @@ def readDMACS():
 		tokens = line.split()
 		if len(tokens) != 0 and tokens[0] not in ("p", "c"):
 			for tok in tokens:
-				lit = int(tok)
-				try:
-					int('')
-				except ValueError:
-					pass      # or whatever
-				maxvar = max(maxvar, abs(lit))
-				if lit == 0:
-					clauseSet.append(list())
+				if representsInt(tok):
+					lit = int(tok)
+					maxvar = max(maxvar, abs(lit))
+					if lit == 0:
+						clauseSet.append(list())
+					else:
+						clauseSet[-1].append(lit)
 				else:
-					clauseSet[-1].append(lit)
+					continue
 	assert len(clauseSet[-1]) == 0
 	clauseSet.pop()
 	print(clauseSet)
